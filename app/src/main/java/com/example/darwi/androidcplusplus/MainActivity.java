@@ -44,16 +44,16 @@ public class MainActivity extends AppCompatActivity {
     private void dotheStuff() throws IOException {
       /*  String inputfilePath = Environment.getExternalStorageDirectory()
                 .getPath() + "/" + "songwav.mp4";*/
-        String outputFilePath = Environment.getExternalStorageDirectory()
+       /* String outputFilePath = Environment.getExternalStorageDirectory()
                 .getPath() + "/" + "songwavmp4.pcm";
-        OutputStream outputStream = new FileOutputStream(outputFilePath);
+        OutputStream outputStream = new FileOutputStream(outputFilePath);*/
         MediaCodec codec;
         AudioTrack audioTrack;
 
 // extractor gets information about the stream
         MediaExtractor extractor = new MediaExtractor();
-       // extractor.setDataSource("http://cds.t2z5e4w2.hwcdn.net/VALERIAN.mp4");
-        extractor.setDataSource("http://html5demos.com/assets/dizzy.mp4");
+        extractor.setDataSource("http://cds.t2z5e4w2.hwcdn.net/VALERIAN.mp4");
+       // extractor.setDataSource("http://html5demos.com/assets/dizzy.mp4");
        // MediaFormat format = extractor.getTrackFormat(1); //TODO if Content is AC3
         MediaFormat format = extractor.getTrackFormat(0);
         String mime = format.getString(MediaFormat.KEY_MIME);
@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
         ByteBuffer[] codecOutputBuffers = codec.getOutputBuffers();
 
         // get the sample rate to configure AudioTrack
-        int sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+        int  sampleRate =48000; //TODO --I Added this for AC3
+       // sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+        Log.e(TAG, "dotheStuff: SAMPLE RATE "+sampleRate );
 
 
         // create our AudioTrack instance
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     // play
                     audioTrack.write(chunk, 0, chunk.length);
                     // write to file
-                    outputStream.write(chunk);
+              //      outputStream.write(chunk);
 
                 }
                 codec.releaseOutputBuffer(outputBufIndex, false /* render */);
@@ -178,8 +180,8 @@ public class MainActivity extends AppCompatActivity {
             audioTrack = null;
         }
 
-        outputStream.flush();
-        outputStream.close();
+      //  outputStream.flush();
+    //    outputStream.close();
 
         codec.stop();
     }
